@@ -1,12 +1,12 @@
 # Election Analysis Workbench
 
-**Status:** Design and Claude implementation handoff plus a tested VoteHub connector module are published. **No desktop binary has yet been built or tested.**
+**Status:** Integrated workbench plan v1.01 and user requirements v1.02 are published. VoteHub connector source and synthetic tests exist. **No installed desktop release, live upstream API verification or complete cross-platform QA has yet been confirmed.**
 
 A planned local-first, GUI-based Windows/Linux election data workbench combining Michigan 2026 turnout analysis with a national OSINT participation and geographic scenario engine. The finished app is intended to import local CSV/XLSX/JSON and optionally authorized Google Sheets, modify assumptions, compare saved scenarios, and run executable hostile QA.
 
 ## For Claude Sonnet / Claude Code
 
-1. **[Read the detailed build plan v1.00](docs/plans/ELECTION_ANALYSIS_WORKBENCH_PLAN_v1.00.md)** — architecture, UI, source/data contracts, exact vote-flow arithmetic, stages, package requirements, regression tests and release gates.
+1. **[Read the integrated build plan v1.01](docs/plans/ELECTION_ANALYSIS_WORKBENCH_PLAN_v1.01.md)** — architecture, UI, source/data contracts, exact vote-flow arithmetic, stages, package requirements, regression tests and release gates.
 2. **[Read CLAUDE.md](CLAUDE.md)** — agent constraints and first implementation tasks.
 3. Implement working code and test real Windows 11 x64 NSIS and Linux x86_64 AppImage packages. A successful build without an actual package launch is NOT a completed requirement.
 
@@ -16,6 +16,15 @@ A planned local-first, GUI-based Windows/Linux election data workbench combining
 The free, CC BY 4.0 VoteHub polling connector is now implemented at [packages/connectors/src/votehub.ts](packages/connectors/src/votehub.ts), with five passing mocked unit tests at [tests/unit/votehub.test.mjs](tests/unit/votehub.test.mjs). It supports **all polling types** by default, not just generic ballot, and uses no paid service, subscription, API key, hosted backend or automatic polling. [Integration contract](docs/plans/VOTEHUB_INTEGRATION_v1.00.md) and [Claude build task](https://github.com/Bomb-Daddy/Election-Model/issues/2).
 
 **Not yet completed:** Electron GUI hookup, live VoteHub network check, saved SQLite snapshots, one-click Windows/Linux installers and installed-app QA. The connector is source code for the build agent, **not** a downloadable functioning desktop application yet.
+
+
+## Current user requirements and activity reconciliation
+
+- **[Authoritative User Requirements v1.02](USER_REQUIREMENTS.md)** — $0 cost rule, all-category VoteHub, five published aggregators, user-requested provisional **"Voter" API**, Michigan early-vote/Marist/RedBox/Silver, national G15, Prediction Register, and complete requirement-by-requirement QA.
+- **[Integrated Workbench Plan v1.01](docs/plans/ELECTION_ANALYSIS_WORKBENCH_PLAN_v1.01.md)** — reconciles November 2 political research reports and GitHub build work. Its previous version is in [archives](docs/archives/ELECTION_ANALYSIS_WORKBENCH_PLAN_v1.00.md).
+- **[Claude desktop epic](https://github.com/Bomb-Daddy/Election-Model/issues/1)**; **[VoteHub issue](https://github.com/Bomb-Daddy/Election-Model/issues/2)**; **[additional "Voter" API issue](https://github.com/Bomb-Daddy/Election-Model/issues/3)**.
+- **Voter API identification is provisional:** AP's *The Voter Poll* is documented but requires subscriber entitlement and is **not enabled**. The $0 rule takes precedence; licensed local imports are acceptable. This is separate from the free VoteHub polling API.
+- User research source originals and calibration reports are kept outside this public GitHub repository; agents must not assume private Drive files are locally present or publish them.
 
 ## Required capabilities
 
