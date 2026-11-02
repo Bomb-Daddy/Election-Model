@@ -1,9 +1,9 @@
 # Election Model — User Requirements
 
-**Version:** 1.01  
+**Version:** 1.02  
 **Added:** 2026-11-02  
 **Updated:** 2026-11-02  
-**Prior version:** [v1.00 archive](docs/archives/USER_REQUIREMENTS_v1.00.md)  
+**Prior versions:** [v1.01](docs/archives/USER_REQUIREMENTS_v1.01.md), [v1.00](docs/archives/USER_REQUIREMENTS_v1.00.md)  
 **Status:** Active / mandatory  
 **Repository:** Election-Model
 
@@ -51,7 +51,7 @@ This requirement remains mandatory in every later requirements version. A subseq
 
 **Acceptance:** Full service/dependency and network review finds no required paid service, billing credential, metered charge or unintended cloud deployment. No user purchase or subscription is necessary to run the locally installed application.
 
-## UR-SRC-001 — Maintain six distinct polling data sources
+## UR-SRC-001 — Maintain seven tracked polling data sources (one provisionally identified)
 
 The front end must list and distinguish these sources:
 1. **Silver Bulletin (Nate Silver):** published polling averages.
@@ -60,6 +60,7 @@ The front end must list and distinguish these sources:
 4. **Decision Desk HQ (DDHQ):** published polling averages and free, permitted data.
 5. **Race to the WH:** polling and model outputs when publicly and lawfully accessible.
 6. **VoteHub:** individual poll observations accessed using its free API, **not** an additional published average.
+7. **Voter** (provisional match: **AP The Voter Poll**): survey crosstabs/race-specific voter research; access requires provider-specific entitlement and cannot be assumed free. Do not enroll in paid service or attempt access without lawful permission. Provider identification remains subject to confirmation.
 
 **Acceptance:** Each provider has its own identity, published source link, geographic/election coverage, dated source status, cost/license status and working acquisition method where authorized. Mark missing automated feeds as unavailable with optional permitted local import, rather than claiming the API exists or silently using a paid feed. No raw poll should be double counted as an independent aggregate.
 
@@ -126,8 +127,68 @@ This adds to, and never weakens, **UR-QA-001**. Every applicable full QA run mus
 | Version | Date | Changes |
 |---|---|---|
 | 1.00 | 2026-11-02 | Universal, exhaustive testable user-acceptance requirement coverage for every full QA pass |
-| **1.01 (current)** | **2026-11-02** | Added $0 hard cost ceiling; all-category VoteHub integration; six-source polling registry; Poll Explorer; provenance, privacy, offline and QA acceptance criteria |
+| 1.01 | 2026-11-02 | Added $0 hard cost ceiling; all-category VoteHub integration; six-source polling registry; Poll Explorer; provenance, privacy, offline and QA acceptance criteria |
+| **1.02 (current)** | **2026-11-02** | Consolidated new political-research threads and provisional Voter API request; added RedBox/Marist/Silver and voter-method QA |
 
-**Scope:** This is the authoritative current user-requirements file. Its predecessor is archived at [v1.00](docs/archives/USER_REQUIREMENTS_v1.00.md). [Election Analysis Workbench plan](docs/plans/ELECTION_ANALYSIS_WORKBENCH_PLAN_v1.00.md) remains the more detailed implementation specification; it may not override mandatory user requirements. The full project inventory must be reconciled with every additional approved requirement before claiming exhaustive project QA.
+**Scope:** This is the authoritative current user-requirements file. Superseded versions are archived at [v1.01](docs/archives/USER_REQUIREMENTS_v1.01.md) and [v1.00](docs/archives/USER_REQUIREMENTS_v1.00.md). [Election Analysis Workbench plan](docs/plans/ELECTION_ANALYSIS_WORKBENCH_PLAN_v1.01.md) remains the more detailed implementation specification; it may not override mandatory user requirements. The full project inventory must be reconciled with every additional approved requirement before claiming exhaustive project QA.
 
-**Status as of revision:** VoteHub connector source and five synthetic/mocked unit tests are committed. **Live API verification, Electron UI integration and real installed Windows/Linux functionality are not yet verified complete.**
+**Status as of revision:** VoteHub connector source and five synthetic/mocked unit tests are committed. **Live API verification, Voter provider free entitlement, Electron UI integration and real installed Windows/Linux functionality are not yet verified complete.**
+
+
+---
+
+## UR-VOTER-001 — Voter data API in provider registry and integration pipeline
+
+User requested a Voter API in addition to the existing VoteHub data API. **Provider identity is provisional.** The documented **Associated Press _The Voter Poll_** API is one plausible match; it is not VoteHub.
+
+- The AP developer documentation defines a race list at \`GET /v3/voterpoll/{electionDate}\` and a \`/download\` response for entitled race survey crosstabs, and requires an AP API key plus Voter Poll subscriber entitlement. The API is **not demonstrated to be free**. Never auto-activate it or any subscription.
+- Register this source as \`provider_unconfirmed / subscription_entitlement_required / not_active\` until the intended Voter provider and lawful zero-cost access can be established.
+- If free authorized access is unavailable, provide an honestly disabled integration with a permitted user-owned/local crosstab import route; do not claim the Voter API is live or create a fake response.
+- AP Voter Poll crosstabs are survey measurements of verified voters, distinct from published polling aggregator averages, early ballot administrative counts and modeled party affiliation. Preserve state, office, election date, survey population, published version/weightingID and preclose/postclose time gate where available.
+- If user later identifies a different Voter API, amend this requirement and provider record without losing this integration request or the $0 limit.
+
+**Acceptance:** Voter source appears with accurate identity/access status, no paid endpoint is invoked, and any imported authorized records retain survey-specific metadata, source status and provenance. Mock an entitlement denied response in QA; no fabricated success.
+
+## UR-MI-001 — Original RedBox and historical exit-poll source preservation
+
+- Support private/local byte-for-byte archival of original user-provided source files with SHA-256 manifests, **not publication to the public repository**. Derived files carry separate versions.
+- Build dated source schemas for RedBox 2026 already-voted, not-yet-voted, all-likely and 2024 historical exit-poll sources. Never treat recall/planned votes, modeled early party affiliation or 2024 exit polls as actual November 2026 individual ballot tallies.
+- Verify reported RedBox original 8,900 source rows, Q2/Q3 Senate and Q6/Q7 governor fields and status columns against originals when accessible, including unweighted sample size, effective n, source-provided single-share MOE, derived D–R uncertainty and rounding.
+- The reported October 20–23 2026 RedBox already-voted subgroup (n=940 unweighted, effective n=280.1) must not silently represent every later early ballot cast by November 2. Cross-compare separate survey windows and target populations.
+
+**Acceptance:** All source categories are distinct, sources and hashes are traceable, original-vs-derived data is clear, no inappropriate pooling, original survey values and historical years are tested. Unavailable originals remain NOT TESTED rather than invented.
+
+## UR-MI-002 — Marist joint reconstruction, demographics and voting-method transition
+
+- Reconstruct Michigan party × age × voting-method × candidate marginals from October 15–18 Marist with constrained/IPF calculations; label the full joint table **unobserved and assumption-dependent**.
+- Do not double-count party and age effects. Verify source marginals within explicitly stated tolerance and run alternative assumption sensitivities.
+- Reject any scenario where the modeled final early 65+ count is below the already-recorded November 2 65+ count; document the observed reported 55% early 65+ share and any assumed 35% all-voter or 40% late-early senior share as **not empirically established**.
+- Model Michigan 2024 introduction of statewide early in-person voting and first 2026 midterm with that mode. Voting-method changes do not themselves prove additional turnout or a partisan swing.
+
+**Acceptance:** Constraint-negative test fails correctly; marginals/conservation pass arithmetic tests; unobserved joint distributions are not reported as observed; 2024 and 2026 voting methods are separately dated.
+
+## UR-MI-003 — Separate Silver calibration, RedBox conditional identities and GOP stress assumptions
+
+- Keep the November 2 Silver Bulletin reported Senate D49.9/R45.2 and governor D51.8/R42.4 as **secondary-transcribed polling averages**, not vote results or independently validated original poll microdata.
+- Show **Marist/IPF structure** and **RedBox-conditional early support** as distinct analytical series, with explicit same-day source vintage, temporal and survey-sample uncertainty.
+- Any statewide Silver recentering exactly matches the statewide source margin **by construction**; this is numerical consistency, not external validation.
+- Preserve user-defined 5% Republican original-cohort crossover and 10% nonvoting as mutually exclusive conditional groups. Do not append them blindly as additional effects to poll averages that may already reflect vote switching.
+- Show election-day recovery thresholds, turnover method assumptions and turnout sensitivity as arithmetic hypotheticals, never measured election-night results or validated win probabilities.
+
+**Acceptance:** Silver normalization, candidate-response denominators, IPF recentering, distinct alternatives and scenario flow tested. 5/90 crossover adjustment and early ballot conservation must be golden-vector tests.
+
+## UR-PR-001 — Prediction Register and distinct model output layers
+
+- Maintain a versioned prediction/evidence ledger with original prediction date, target date/window (including post-2028 pending entries), metric, source, assumptions, amendments and evaluation status.
+- G15/effective generic ballot represents **poll starting environment plus participation/defection/third-party changes in an explicitly hypothetical two-party vote denominator**; it is not merely a static generic ballot average.
+- Keep provider published polls, poll averages, modeled turnout, sensitivity results and official counted ballots as distinct typed records. Do not score pending predictions before their target event or fabricate outcome probabilities.
+
+**Acceptance:** G15 and vote-flow cohorts are reproducible; no previously scheduled future PR is improperly resolved; different observation/assumption types are visible and cannot be silently combined.
+
+## UR-QA-003 — Integrated full QA and latest source-research findings
+
+UR-QA-001 remains mandatory. The complete testability matrix shall include **every requirement in this repository** and all testable provisions of Political OSINT User Requirements v1.02, using a namespaced ID mapping for collisions. In addition, test all UR-VOTER-001, UR-MI-001/002/003 and UR-PR-001 acceptance criteria.
+
+Track historical reported RedBox calibration and independent consistency audit v1.03 checks as **source evidence only**, not proof that the new installed application passed. The reported 52/53 source assertions and 66 arithmetic results cannot replace current software testing.
+
+**Acceptance:** Full matrix with PASS/FAIL/NOT TESTED/NOT APPLICABLE for each applicable testable item, counts, build identity, datasets, observed evidence and signed-off unresolved gates. Include real installed Windows/Linux GUI, free-cost and AP entitlement-denial QA. Anything incomplete means **PARTIAL/INCOMPLETE**, not fully released.
