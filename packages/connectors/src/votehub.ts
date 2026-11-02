@@ -50,12 +50,12 @@ function record(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 function requiredText(value: unknown, field: string): string {
-  if (typeof value !== "string" || value.length === 0) throw new Error(\`VoteHub: missing/invalid \${field}\`);
+  if (typeof value !== "string" || value.length === 0) throw new Error(`VoteHub: missing/invalid ${field}`);
   return value;
 }
 function checkedDate(value: unknown, field: string): string {
-  if (typeof value !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(value) || Number.isNaN(Date.parse(\`\${value}T00:00:00Z\`))) {
-    throw new Error(\`VoteHub: invalid \${field} (expected YYYY-MM-DD)\`);
+  if (typeof value !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(value) || Number.isNaN(Date.parse(`${value}T00:00:00Z`))) {
+    throw new Error(`VoteHub: invalid ${field} (expected YYYY-MM-DD)`);
   }
   return value;
 }
@@ -86,13 +86,13 @@ export function voteHubPollsUrl(filters: VoteHubPollFilters = {}): string {
     } else if (key === "from_date" || key === "to_date") {
       params.set(key, checkedDate(input, key));
     } else {
-      if (typeof input !== "string" || input.length > 200) throw new Error(\`VoteHub: invalid \${key}\`);
+      if (typeof input !== "string" || input.length > 200) throw new Error(`VoteHub: invalid ${key}`);
       params.set(key, input);
     }
   }
   if (filters.from_date && filters.to_date && filters.from_date > filters.to_date) throw new Error("VoteHub: from_date is after to_date");
   const suffix = params.toString();
-  return \`\${VOTEHUB_API_BASE}/polls\${suffix ? \`?\${suffix}\` : ""}\`;
+  return `${VOTEHUB_API_BASE}/polls${suffix ? `?${suffix}` : ""}`;
 }
 
 export interface VoteHubClientOptions {
@@ -120,7 +120,7 @@ export class VoteHubClient {
 
   private async request<T>(url: string, parse: (value: unknown) => T, forceRefresh = false): Promise<VoteHubResponse<T>> {
     // Only URLs generated in this module. No arbitrary URL/host from user input.
-    if (!url.startsWith(\`\${VOTEHUB_API_BASE}/\`)) throw new Error("VoteHub: invalid upstream host");
+    if (!url.startsWith(`${VOTEHUB_API_BASE}/`)) throw new Error("VoteHub: invalid upstream host");
     const cached = this.cache.get(url);
     if (!forceRefresh && cached && this.now() - cached.timestamp < this.cacheMs) {
       return this.wrap(parse(cached.value), cached.timestamp, true, false);
@@ -129,7 +129,7 @@ export class VoteHubClient {
     const timer = setTimeout(() => controller.abort(), this.timeoutMs);
     try {
       const response = await this.fetcher(url, { signal: controller.signal, headers: { Accept: "application/json" } });
-      if (!response.ok) throw new Error(\`VoteHub: HTTP \${response.status}\`);
+      if (!response.ok) throw new Error(`VoteHub: HTTP ${response.status}`);
       const raw: unknown = await response.json();
       const data = parse(raw); // Never cache a payload that fails schema validation.
       const timestamp = this.now();
@@ -155,22 +155,22 @@ export class VoteHubClient {
   }
   getPollById(id: string, forceRefresh = false): Promise<VoteHubResponse<VoteHubPoll>> {
     if (!/^[A-Za-z0-9_-]{1,100}$/.test(id)) throw new Error("VoteHub: invalid poll ID");
-    return this.request(\`\${VOTEHUB_API_BASE}/polls/\${encodeURIComponent(id)}\`, parseVoteHubPoll, forceRefresh);
+    return this.request(`${VOTEHUB_API_BASE}/polls/${encodeURIComponent(id)}`, parseVoteHubPoll, forceRefresh);
   }
   getPollsters(forceRefresh = false): Promise<VoteHubResponse<string[]>> {
-    return this.request(\`\${VOTEHUB_API_BASE}/pollsters\`, (value) => {
+    return this.request(`${VOTEHUB_API_BASE}/pollsters`, (value) => {
       if (!Array.isArray(value) || !value.every((v) => typeof v === "string")) throw new Error("VoteHub: invalid pollster list");
       return value;
     }, forceRefresh);
   }
   getPollTypes(forceRefresh = false): Promise<VoteHubResponse<string[]>> {
-    return this.request(\`\${VOTEHUB_API_BASE}/poll-types\`, (value) => {
+    return this.request(`${VOTEHUB_API_BASE}/poll-types`, (value) => {
       if (!Array.isArray(value) || !value.every((v) => typeof v === "string")) throw new Error("VoteHub: invalid poll-type list");
       return value;
     }, forceRefresh);
   }
   getSubjects(forceRefresh = false): Promise<VoteHubResponse<VoteHubSubject[]>> {
-    return this.request(\`\${VOTEHUB_API_BASE}/subjects\`, (value) => {
+    return this.request(`${VOTEHUB_API_BASE}/subjects`, (value) => {
       if (!Array.isArray(value)) throw new Error("VoteHub: invalid subjects list");
       return value.map((item): VoteHubSubject => {
         if (!record(item) || typeof item.subject !== "string" || !Array.isArray(item.poll_types) || !item.poll_types.every((v) => typeof v === "string")) {
