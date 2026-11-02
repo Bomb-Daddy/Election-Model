@@ -1,6 +1,10 @@
 # Claude Sonnet / Claude Code — Election Analysis Workbench
 
-Read docs/plans/ELECTION_ANALYSIS_WORKBENCH_PLAN_v1.00.md before coding. It defines the required desktop product, data contracts, model math, deployment and hostile QA.
+Read docs/plans/ELECTION_ANALYSIS_WORKBENCH_PLAN_v1.00.md before coding.
+
+**AUTHORITATIVE USER REQUIREMENTS:** Read [USER_REQUIREMENTS.md](USER_REQUIREMENTS.md) **v1.01** before changing code or running QA. It is mandatory and includes UR-QA-001 universal full acceptance coverage, UR-COST-001 $0 spending policy, and UR-API-002 all available polling categories by default. If this file is revised later, use its latest approved version. The detailed plan does not override user requirements.
+
+ It defines the required desktop product, data contracts, model math, deployment and hostile QA.
 
 ## Mission
 Build an actual offline-first Linux and Windows graphical desktop application. Deliver Windows x64 one-click NSIS .exe, Linux x64 AppImage and optional .deb, with no user-installed Python, Node, database server or CLI tools. Codebase: Electron, React, TypeScript, pure shared calculation engine, bundled SQLite.
