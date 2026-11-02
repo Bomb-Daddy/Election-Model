@@ -1,8 +1,8 @@
 # Claude Sonnet / Claude Code — Election Analysis Workbench
 
-Read docs/plans/ELECTION_ANALYSIS_WORKBENCH_PLAN_v1.00.md before coding.
+Read docs/plans/ELECTION_ANALYSIS_WORKBENCH_PLAN_v1.01.md before coding.
 
-**AUTHORITATIVE USER REQUIREMENTS:** Read [USER_REQUIREMENTS.md](USER_REQUIREMENTS.md) **v1.01** before changing code or running QA. It is mandatory and includes UR-QA-001 universal full acceptance coverage, UR-COST-001 $0 spending policy, and UR-API-002 all available polling categories by default. If this file is revised later, use its latest approved version. The detailed plan does not override user requirements.
+**AUTHORITATIVE USER REQUIREMENTS:** Read [USER_REQUIREMENTS.md](USER_REQUIREMENTS.md) **v1.02** before changing code or running QA. It is mandatory and includes UR-QA-001 universal full acceptance coverage, UR-COST-001 $0 spending policy, and UR-API-002 all available polling categories by default. If this file is revised later, use its latest approved version. The detailed plan does not override user requirements.
 
  It defines the required desktop product, data contracts, model math, deployment and hostile QA.
 
@@ -35,3 +35,11 @@ Use small commits. After each phase report files changed, test commands and resu
 - Make VoteHub available through a secure read-only Electron main-process IPC interface and a fully functional Poll Explorer, where **ALL polling types are selected by default**. Do not force generic ballot.
 - Consume VoteHub's documented five endpoints, preserve raw poll metadata, create immutable local source snapshots, handle offline/stale states and explicit refresh. No automatic polling or silent changes to existing G15 or OSINT v3 data.
 - **Current status:** connector and 5 offline synthetic tests implemented; live upstream verification and GUI packaging are not yet done. Do not claim the feature is shipped until real Windows and Linux installed applications run successfully.
+
+
+## New mandatory integration reconciliation — 2026-11-02
+- Read the latest \`USER_REQUIREMENTS.md\` (v1.02) **and** consolidated \`docs/plans/ELECTION_ANALYSIS_WORKBENCH_PLAN_v1.01.md\` before coding; preserve archived v1.00 plan and v1.01 requirements.
+- The user's separate **Political OSINT requirements v1.02** govern RedBox source fidelity, Marist/IPF reconstruction, Silver calibration, early ballot 65+ constraint, voting-mode transition, scenario separation and full QA. These source files exist outside the public repo and must be imported only with permission. Do not claim private files are already present.
+- Include the user-requested **"Voter" API** source; **provisional** documented candidate AP's *The Voter Poll*. AP subscription entitlement is required; **never activate paid access or fabricate an API connection**. Implement read-only source status, a $0 entitlement gate and optional licensed local import. Keep source identity provisional until clarified.
+- Add VoteHub (all categories by default), five aggregator source statuses, Michigan RedBox/Marist/Silver, national G15, Prediction Register and all cross-cutting QA to the **same local-first Electron app**.
+- A full QA check cannot pass until every applicable testable user requirement has current evidence. Historical audits, mock-only tests and compilation are not installed Windows/Linux release evidence.
