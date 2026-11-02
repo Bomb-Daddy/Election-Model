@@ -23,3 +23,11 @@ Build an actual offline-first Linux and Windows graphical desktop application. D
 5. Full end-to-end hostile QA, cross-platform release artifacts, checksums, change log and user manual.
 
 Use small commits. After each phase report files changed, test commands and results, packaging targets, real OS launch status, unresolved blockers, and next action. Plan revisions use v1.00, v1.01, etc., with older versions archived.
+
+
+## Active work: VoteHub free polling API connector (2026-11-02)
+- **Read [VoteHub Integration Contract v1.00](docs/plans/VOTEHUB_INTEGRATION_v1.00.md) before implementation.** A dependency-free TypeScript connector has been committed at `packages/connectors/src/votehub.ts` with mocked tests at `tests/unit/votehub.test.mjs`.
+- **Hard user requirement: $0 cost.** No paid feeds, billing accounts, cloud hosting, paid inference, trials or subscriptions. VoteHub publicly provides this API free under CC BY 4.0; preserve attribution in the UI and exports.
+- Make VoteHub available through a secure read-only Electron main-process IPC interface and a fully functional Poll Explorer, where **ALL polling types are selected by default**. Do not force generic ballot.
+- Consume VoteHub's documented five endpoints, preserve raw poll metadata, create immutable local source snapshots, handle offline/stale states and explicit refresh. No automatic polling or silent changes to existing G15 or OSINT v3 data.
+- **Current status:** connector and 5 offline synthetic tests implemented; live upstream verification and GUI packaging are not yet done. Do not claim the feature is shipped until real Windows and Linux installed applications run successfully.
