@@ -40,8 +40,8 @@ if(polls===null){
       try{j=JSON.parse(textBody)}catch{}
       const keys=j&&typeof j==='object'?Object.keys(j).slice(0,12):[];
       const shape=j&&typeof j==='object'?Object.fromEntries(keys.map(key=>[key,Array.isArray(j[key])?'array('+j[key].length+')':typeof j[key]])):{};
-      process.stdout.write('LIVE_API_SHAPE '+JSON.stringify({label,status:r.status,bytes:textBody.length,keys,shape,preview:textBody.slice(0,350)})+'\\n');
-    }catch(e){process.stderr.write('LIVE_API_SHAPE_FAIL '+label+' '+String(e.message||e)+'\\n')}
+      process.stdout.write('LIVE_API_SHAPE '+JSON.stringify({label,status:r.status,bytes:textBody.length,keys,shape,preview:textBody.slice(0,350)})+'\n');
+    }catch(e){process.stderr.write('LIVE_API_SHAPE_FAIL '+label+' '+String(e.message||e)+'\n')}
   }
 }
 if(polls?.length){
