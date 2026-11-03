@@ -72,3 +72,11 @@ test('upstream error without cache is visible; no silent fake data', async () =>
   const api = new VoteHubClient({ fetcher: async () => new Response('no', { status: 503 }) });
   await assert.rejects(api.getPollTypes(), /HTTP 503/);
 });
+
+test('live VoteHub direct top-level poll array is accepted without losing fields',async()=>{
+  const api=new VoteHubClient({fetcher:async()=>Response.json([{...sample,poll_type:'approval',sample_size:800}])});
+  const response=await api.getPolls();
+  assert.equal(response.data.length,1);
+  assert.equal(response.data[0].poll_type,'approval');
+  assert.equal(response.data[0].raw.sample_size,800);
+});
