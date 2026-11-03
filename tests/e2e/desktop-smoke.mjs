@@ -5,7 +5,7 @@
  */
 import { _electron as electron } from 'playwright';
 import assert from 'node:assert/strict';
-import {mkdirSync} from 'node:fs';
+import {mkdirSync,writeFileSync,readFileSync,existsSync} from 'node:fs';
 import {join,resolve} from 'node:path';
 import {setTimeout as sleep} from 'node:timers/promises';
 
@@ -47,6 +47,39 @@ try{
     await window.getByRole('textbox',{name:'Scenario name'}).fill('Automated installed-GUI test');
     await window.getByRole('button',{name:'Save as new version'}).click();
     await window.getByRole('button',{name:/Automated installed-GUI test/}).waitFor();
+  });
+  await check('Native CSV file picker imports source and preserves provenance in SQLite',async()=>{
+    const csvPath=join(evidence,'synthetic-public-fixture.csv');
+    writeFileSync(csvPath,'pollster,poll_type,share\\nExample Survey,approval,44\\n');
+    await app.evaluate(({dialog},paths)=>{
+      dialog.showOpenDialog=async()=>({canceled:false,filePaths:paths});
+    },[csvPath]);
+    await window.getByRole('button',{name:'Source Library'}).click();
+    await window.getByRole('row').filter({hasText:'VoteHub'}).first().getByRole('button',{name:'Import local file'}).click();
+    await window.getByText('synthetic-public-fixture.csv').waitFor();
+    await window.getByRole('row').filter({hasText:'synthetic-public-fixture.csv'}).getByRole('button',{name:'Inspect'}).click();
+    await window.getByText(/SHA-256:/).waitFor();
+  });
+  await check('Native JSON snapshot export produces provenance and source records',async()=>{
+    const dest=join(evidence,'exported-source.json');
+    await app.evaluate(({dialog},filePath)=>{
+      dialog.showSaveDialog=async()=>({canceled:false,filePath});
+    },dest);
+    await window.getByRole('button',{name:'Export snapshot'}).click();
+    assert.ok(existsSync(dest),'Export file was not written');
+    const exported=JSON.parse(readFileSync(dest,'utf8'));
+    assert.equal(exported.metadata.provider,'VoteHub');
+    assert.equal(exported.data.length,1);
+    assert.equal(exported.data[0].pollster,'Example Survey');
+    assert.equal(exported.metadata.sha256.length,64);
+  });
+  await check('Invalid original Republican cohort percentages show an actionable error',async()=>{
+    await window.getByRole('button',{name:'National Model'}).click();
+    await window.getByRole('spinbutton',{name:'Original potential Republicans not voting (%)'}).fill('90');
+    await window.getByRole('spinbutton',{name:'Original potential Republicans voting Democratic (%)'}).fill('30');
+    await window.getByRole('button',{name:'Calculate scenario'}).click();
+    await window.getByRole('alert').filter({hasText:/cannot sum over 100%/}).waitFor();
+    await window.getByRole('button',{name:'Reset all to zero'}).click();
   });
   await check('Michigan arithmetic can be executed by real GUI',async()=>{
     await window.getByRole('button',{name:'Michigan Lab'}).click();
