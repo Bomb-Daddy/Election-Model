@@ -46,7 +46,7 @@ try{
   await check('Scenario persists to SQLite and is visibly listed',async()=>{
     await window.getByRole('textbox',{name:'Scenario name'}).fill('Automated installed-GUI test');
     await window.getByRole('button',{name:'Save as new version'}).click();
-    await window.getByText('Automated installed-GUI test').waitFor();
+    await window.getByRole('button',{name:/Automated installed-GUI test/}).waitFor();
   });
   await check('Michigan arithmetic can be executed by real GUI',async()=>{
     await window.getByRole('button',{name:'Michigan Lab'}).click();
