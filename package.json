@@ -1,0 +1,85 @@
+{
+  "name": "election-analysis-workbench",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Local-first election polling and scenario research workbench",
+  "main": "electron/main.mjs",
+  "scripts": {
+    "start": "electron .",
+    "build": "vite build",
+    "test": "node --test tests/unit/*.test.mjs",
+    "typecheck": "tsc --noEmit",
+    "package": "electron-builder --publish never",
+    "package:linux": "electron-builder --linux deb AppImage --x64 --publish never",
+    "package:windows": "electron-builder --win nsis --x64 --publish never"
+  },
+  "dependencies": {
+    "csv-parse": "6.1.0",
+    "exceljs": "4.4.0",
+    "react": "19.2.0",
+    "react-dom": "19.2.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "5.1.4",
+    "electron": "45.2.1",
+    "electron-builder": "26.18.0",
+    "vite": "7.1.0"
+  },
+  "build": {
+    "appId": "org.local.electionworkbench",
+    "productName": "Election Analysis Workbench",
+    "asar": true,
+    "files": [
+      "electron/**/*",
+      "packages/**/*",
+      "dist/**/*",
+      "package.json",
+      "!**/*.test.*"
+    ],
+    "directories": {
+      "output": "release"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": true,
+      "perMachine": false,
+      "allowElevation": false,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    },
+    "linux": {
+      "target": [
+        {
+          "target": "deb",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "AppImage",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "category": "Science",
+      "executableName": "election-analysis-workbench",
+      "synopsis": "Election polling research and scenario analysis",
+      "description": "Free offline-first election analysis desktop app"
+    },
+    "toolsets": {
+      "appimage": "1.0.3"
+    },
+    "publish": null
+  }
+}
