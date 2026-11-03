@@ -1,0 +1,59 @@
+name: Publish clearly labeled free QA-incomplete preview installers
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "docs/release-preview/REQUEST.md"
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  preview:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check zero-cost verified successful build run
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          RUN_ID="$(sed -n 's/^run_id: *//p' docs/release-preview/REQUEST.md | head -1)"
+          if [[ ! "$RUN_ID" =~ ^[0-9]+$ ]]; then echo 'Invalid build run ID'; exit 1; fi
+          STATUS="$(gh api "repos/$GITHUB_REPOSITORY/actions/runs/$RUN_ID" --jq .status)"
+          CONCLUSION="$(gh api "repos/$GITHUB_REPOSITORY/actions/runs/$RUN_ID" --jq .conclusion)"
+          if [[ "$STATUS" != 'completed' || "$CONCLUSION" != 'success' ]]; then
+            echo "Build $RUN_ID has not passed: $STATUS / $CONCLUSION"; exit 1;
+          fi
+          SHA="$(gh api "repos/$GITHUB_REPOSITORY/actions/runs/$RUN_ID" --jq .head_sha)"
+          echo "RUN_ID=$RUN_ID" >> "$GITHUB_ENV"
+          echo "SHA=$SHA" >> "$GITHUB_ENV"
+          echo "TAG=v0.1.0-preview-${SHA:0:7}" >> "$GITHUB_ENV"
+      - name: Download the genuinely built Windows and Linux packages
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          mkdir -p preview/windows preview/linux
+          gh run download "$RUN_ID" --repo "$GITHUB_REPOSITORY" --name election-workbench-windows-x64 --dir preview/windows
+          gh run download "$RUN_ID" --repo "$GITHUB_REPOSITORY" --name election-workbench-linux-x64 --dir preview/linux
+          find preview -type f -maxdepth 3 -print
+          test "$(find preview -name '*.exe' | wc -l)" -eq 1
+          test "$(find preview -name '*.deb' | wc -l)" -eq 1
+          test "$(find preview -name '*.AppImage' | wc -l)" -eq 1
+      - name: Publish a prerelease explicitly marked not fully QA-cleared
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          mapfile -d '' FILES < <(find preview -type f \( -name '*.exe' -o -name '*.deb' -o -name '*.AppImage' -o -name 'SHA256SUMS*' \) -print0)
+          if (( ${#FILES[@]} < 3 )); then echo 'Installers are missing'; exit 1; fi
+          gh release create "$TAG" --repo "$GITHUB_REPOSITORY" --target "$SHA" --prerelease --title "Election Workbench 0.1.0 — preview (QA INCOMPLETE)" --notes-file docs/release-preview/NOTES.md "${FILES[@]}"
+          gh release view "$TAG" --repo "$GITHUB_REPOSITORY" --json url,assets
+
+# Public repo standard GitHub-hosted runner + releases only; never bill for
+# preview publication. Preview is NOT a release acceptance certification.
