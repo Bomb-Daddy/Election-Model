@@ -4,6 +4,8 @@ on:
     branches: [main]
     paths:
       - "tests/integration/votehub-live.mjs"
+      - "packages/connectors/src/votehub.ts"
+      - "tests/unit/votehub.test.mjs"
       - ".github/workflows/votehub-compat.yml"
   workflow_dispatch:
 permissions:
