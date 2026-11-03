@@ -149,8 +149,11 @@ export class VoteHubClient {
   /** No filters means ALL available poll types, rather than generic-ballot only. */
   getPolls(filters: VoteHubPollFilters = {}, forceRefresh = false): Promise<VoteHubResponse<VoteHubPoll[]>> {
     return this.request(voteHubPollsUrl(filters), (value) => {
-      if (!record(value) || !Array.isArray(value.polls)) throw new Error("VoteHub: expected polls array");
-      return value.polls.map(parseVoteHubPoll);
+      // The public docs show {polls:[...]}, while the live 2026 endpoint
+      // returns a top-level array. Accept both without losing raw fields.
+      const records = Array.isArray(value) ? value : record(value) && Array.isArray(value.polls) ? value.polls : null;
+      if (!records) throw new Error("VoteHub: expected top-level polls array or {polls: array}");
+      return records.map(parseVoteHubPoll);
     }, forceRefresh);
   }
   getPollById(id: string, forceRefresh = false): Promise<VoteHubResponse<VoteHubPoll>> {
