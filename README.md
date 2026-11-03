@@ -1,8 +1,12 @@
 # Election Analysis Workbench
 
-**Status:** Integrated workbench plan v1.02 and user requirements v1.03 are published. VoteHub connector source and synthetic tests exist. **No installed desktop release, live upstream API verification or complete cross-platform QA has yet been confirmed.**
+**Status (2026-11-03):** A Windows/Linux **development preview v0.1.0 is built and tested** with one-click installer binaries. 28 unit tests, 13 packaged GUI smoke checks and 13 actually installed GUI smoke checks pass on each tested OS. **Free live VoteHub API verified** across all 5 endpoints: 6,108 polls, 10 categories. **Full project requirements QA and human usability acceptance remain INCOMPLETE; this is NOT a final certified release.**
 
-A planned local-first, GUI-based Windows/Linux election data workbench combining Michigan 2026 turnout analysis with a national OSINT participation and geographic scenario engine. The finished app is intended to import local CSV/XLSX/JSON and optionally authorized Google Sheets, modify assumptions, compare saved scenarios, and run executable hostile QA.
+An initial local-first, GUI-based Windows/Linux election data workbench combining Michigan 2026 turnout analysis with a national OSINT participation and geographic scenario engine. The preview supports local CSV/XLSX/JSON imports, immutable SQLite snapshots, VoteHub polling exploration, Michigan/national conditional scenario arithmetic, prediction register, saved scenario comparisons, backup/restore and core QA. Full authorized historical models, complete provider automation, Google Sheets OAuth and comprehensive source imports are not yet completed.
+
+## Status, downloads and QA
+
+Latest developer-test binaries are published under [GitHub prereleases](https://github.com/Bomb-Daddy/Election-Model/releases) with direct Windows .exe and Linux .deb/AppImage assets. Use the newest tested prerelease, not the older VoteHub-broken v0.1.0-preview-73bd602. The [installed-platform QA evidence](docs/qa/BUILD_QA_CHECKPOINT_2026-11-03_v1.00.md) records tested and untested requirements.
 
 ## For Claude Sonnet / Claude Code
 
@@ -13,9 +17,9 @@ A planned local-first, GUI-based Windows/Linux election data workbench combining
 
 ## VoteHub polling API (new implementation, 2026-11-02)
 
-The free, CC BY 4.0 VoteHub polling connector is now implemented at [packages/connectors/src/votehub.ts](packages/connectors/src/votehub.ts), with five passing mocked unit tests at [tests/unit/votehub.test.mjs](tests/unit/votehub.test.mjs). It supports **all polling types** by default, not just generic ballot, and uses no paid service, subscription, API key, hosted backend or automatic polling. [Integration contract](docs/plans/VOTEHUB_INTEGRATION_v1.00.md) and [Claude build task](https://github.com/Bomb-Daddy/Election-Model/issues/2).
+The free, CC BY 4.0 VoteHub polling connector is implemented and integrated into the Electron GUI at [packages/connectors/src/votehub.ts](packages/connectors/src/votehub.ts), with six passing mocked unit tests at [tests/unit/votehub.test.mjs](tests/unit/votehub.test.mjs). It supports **all polling types** by default, not just generic ballot, and uses no paid service, subscription, API key, hosted backend or automatic polling. [Integration contract](docs/plans/VOTEHUB_INTEGRATION_v1.00.md) and [Claude build task](https://github.com/Bomb-Daddy/Election-Model/issues/2).
 
-**Not yet completed:** Electron GUI hookup, live VoteHub network check, saved SQLite snapshots, one-click Windows/Linux installers and installed-app QA. The connector is source code for the build agent, **not** a downloadable functioning desktop application yet.
+**Implemented and validated at 2026-11-03:** Electron GUI hookup, local SQLite snapshots, Windows NSIS and Linux .deb/AppImage packaging, installed-app automated QA and all five VoteHub live endpoints. **Still outstanding:** nontechnical human full GUI acceptance, live operation on the user's own computer, all applicable UI controls, unrestricted paid aggregator connectivity, complete Michigan/435-district source imports.
 
 
 ## Current user requirements and activity reconciliation
@@ -49,8 +53,8 @@ References: [Authoritative USER_REQUIREMENTS.md v1.03](USER_REQUIREMENTS.md) (UR
 
 ## Data/privacy
 
-**This repository is PUBLIC.** Do not upload private Google Drive documents or identifiers, personal voter data, private images, copyrighted restricted poll feeds, credentials, OAuth refresh tokens or unpublished datasets. Original Michigan v2.03 and OSINT v3 sources exist outside this empty starter codebase and require a permitted local import/authorized connector; they are NOT silently available to a coding agent.
+**This repository is PUBLIC.** Do not upload private Google Drive documents or identifiers, personal voter data, private images, copyrighted restricted poll feeds, credentials, OAuth refresh tokens or unpublished datasets. Original Michigan v2.03 and OSINT v3 sources exist outside this public starter codebase and require a permitted local import/authorized connector; they are NOT silently available to a coding agent.
 
 ## Source status
 
-The versioned plan is grounded in the existing Michigan turnout v2.03, OSINT national v3 and Michigan–OSINT integration QA v1.00. It explicitly tracks known defects and uncertainty. No code or data integration has been executed in this repository yet.
+The versioned plan is grounded in the existing Michigan turnout v2.03, OSINT national v3 and Michigan–OSINT integration QA v1.00. It explicitly tracks known defects and uncertainty. The first working local-first desktop modules and free live VoteHub connector have been implemented. Comprehensive source-data integration and full release QA remain incomplete.
