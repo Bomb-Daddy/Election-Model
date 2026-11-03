@@ -30,6 +30,8 @@ jobs:
           node-version: "24"
       - name: Install free open-source dependencies
         run: npm install --no-audit --no-fund
+        env:
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "1"
       - name: Compile and test code
         run: |
           npm run typecheck
@@ -39,6 +41,20 @@ jobs:
         run: npm run package:linux
         env:
           CSC_IDENTITY_AUTO_DISCOVERY: "false"
+      - name: Headed Electron GUI smoke test on packaged Linux app
+        shell: bash
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y xvfb
+          ELECTION_EXECUTABLE="$PWD/release/linux-unpacked/election-analysis-workbench" xvfb-run -a node tests/e2e/desktop-smoke.mjs
+      - name: Archive Linux GUI screenshots even on failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: election-workbench-linux-gui-evidence
+          path: qa-artifacts/*.png
+          retention-days: 3
+          if-no-files-found: ignore
       - name: List package files and SHA-256 hashes
         shell: bash
         run: |
@@ -67,6 +83,8 @@ jobs:
       - name: Install free open-source dependencies
         shell: pwsh
         run: npm install --no-audit --no-fund
+        env:
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "1"
       - name: Compile and test code
         shell: pwsh
         run: |
@@ -78,6 +96,19 @@ jobs:
         run: npm run package:windows
         env:
           CSC_IDENTITY_AUTO_DISCOVERY: "false"
+      - name: Run packaged Windows Electron GUI smoke tests
+        shell: pwsh
+        run: |
+          $env:ELECTION_EXECUTABLE = (Resolve-Path "release/win-unpacked/Election Analysis Workbench.exe").Path
+          node tests/e2e/desktop-smoke.mjs
+      - name: Archive Windows GUI screenshots even on failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: election-workbench-windows-gui-evidence
+          path: qa-artifacts/*.png
+          retention-days: 3
+          if-no-files-found: ignore
       - name: Record package SHA-256
         shell: pwsh
         run: |
