@@ -37,6 +37,9 @@ jobs:
           npm run typecheck
           npm test
           npm run build
+      - name: Optional live VoteHub free API endpoint verification (separate from mock QA)
+        continue-on-error: true
+        run: node tests/integration/votehub-live.mjs
       - name: Build graphical Linux .deb and AppImage
         run: npm run package:linux
         env:
