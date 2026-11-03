@@ -54,7 +54,7 @@ jobs:
         shell: bash
         run: |
           sudo apt-get install -y ./release/election-analysis-workbench_0.1.0_amd64.deb
-          INSTALLED_BIN="$(dpkg -L election-analysis-workbench | grep '/election-analysis-workbench$' | head -n 1)"
+          INSTALLED_BIN="/opt/Election Analysis Workbench/election-analysis-workbench"
           if [[ -z "$INSTALLED_BIN" || ! -x "$INSTALLED_BIN" ]]; then
             echo "::error::Installed Linux executable was not located."
             exit 1
