@@ -1,0 +1,22 @@
+name: Verify VoteHub free API compatibility
+on:
+  push:
+    branches: [main]
+    paths:
+      - "tests/integration/votehub-live.mjs"
+      - ".github/workflows/votehub-compat.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  api-shape:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+      - name: Exercise free VoteHub API and report actual schema
+        run: node tests/integration/votehub-live.mjs
+# Source may fail or time out. No API key, billing, storage, premium runners or paid services.
