@@ -6,7 +6,7 @@ An initial local-first, GUI-based Windows/Linux election data workbench combinin
 
 ## Status, downloads and QA
 
-Latest developer-test binaries are published under [GitHub prereleases](https://github.com/Bomb-Daddy/Election-Model/releases) with direct Windows .exe and Linux .deb/AppImage assets. Use the newest tested prerelease, not the older VoteHub-broken v0.1.0-preview-73bd602. The [installed-platform QA evidence](docs/qa/BUILD_QA_CHECKPOINT_2026-11-03_v1.00.md) records tested and untested requirements.
+Latest developer-test binaries are published under [corrected v0.1.0 developer prerelease](https://github.com/Bomb-Daddy/Election-Model/releases/tag/v0.1.0-preview-96846df) with direct Windows .exe and Linux .deb/AppImage assets. Use the newest tested prerelease, not the older VoteHub-broken v0.1.0-preview-73bd602. The [installed-platform QA evidence v1.01](docs/qa/BUILD_QA_CHECKPOINT_2026-11-03_v1.01.md) records tested and untested requirements.
 
 ## For Claude Sonnet / Claude Code
 
