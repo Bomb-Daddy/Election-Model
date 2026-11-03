@@ -1,8 +1,8 @@
 # Claude Sonnet / Claude Code — Election Analysis Workbench
 
-Read docs/plans/ELECTION_ANALYSIS_WORKBENCH_PLAN_v1.01.md before coding.
+Read docs/plans/ELECTION_ANALYSIS_WORKBENCH_PLAN_v1.02.md before coding.
 
-**AUTHORITATIVE USER REQUIREMENTS:** Read [USER_REQUIREMENTS.md](USER_REQUIREMENTS.md) **v1.02** before changing code or running QA. It is mandatory and includes UR-QA-001 universal full acceptance coverage, UR-COST-001 $0 spending policy, and UR-API-002 all available polling categories by default. If this file is revised later, use its latest approved version. The detailed plan does not override user requirements.
+**AUTHORITATIVE USER REQUIREMENTS:** Read [USER_REQUIREMENTS.md](USER_REQUIREMENTS.md) **v1.03** before changing code or running QA. It is mandatory and includes UR-QA-001 universal full acceptance coverage, UR-COST-001 $0 spending policy, and UR-API-002 all available polling categories by default, plus UR-INSTALL-001, UR-LAUNCH-001, UR-GUI-001, UR-GUI-QA-001 and UR-QA-004 one-click installers and complete installed-GUI acceptance. If this file is revised later, use its latest approved version. The detailed plan does not override user requirements.
 
  It defines the required desktop product, data contracts, model math, deployment and hostile QA.
 
@@ -38,8 +38,18 @@ Use small commits. After each phase report files changed, test commands and resu
 
 
 ## New mandatory integration reconciliation — 2026-11-02
-- Read the latest \`USER_REQUIREMENTS.md\` (v1.02) **and** consolidated \`docs/plans/ELECTION_ANALYSIS_WORKBENCH_PLAN_v1.01.md\` before coding; preserve archived v1.00 plan and v1.01 requirements.
+- Read the latest \`USER_REQUIREMENTS.md\` (v1.03) **and** consolidated \`docs/plans/ELECTION_ANALYSIS_WORKBENCH_PLAN_v1.02.md\` before coding; preserve archived v1.00 plan and v1.01 requirements.
 - The user's separate **Political OSINT requirements v1.02** govern RedBox source fidelity, Marist/IPF reconstruction, Silver calibration, early ballot 65+ constraint, voting-mode transition, scenario separation and full QA. These source files exist outside the public repo and must be imported only with permission. Do not claim private files are already present.
 - Include the user-requested **"Voter" API** source; **provisional** documented candidate AP's *The Voter Poll*. AP subscription entitlement is required; **never activate paid access or fabricate an API connection**. Implement read-only source status, a $0 entitlement gate and optional licensed local import. Keep source identity provisional until clarified.
 - Add VoteHub (all categories by default), five aggregator source statuses, Michigan RedBox/Marist/Silver, national G15, Prediction Register and all cross-cutting QA to the **same local-first Electron app**.
 - A full QA check cannot pass until every applicable testable user requirement has current evidence. Historical audits, mock-only tests and compilation are not installed Windows/Linux release evidence.
+
+## Mandatory 2026-11-03 priority — one-click installer/execution and fully functional user GUI
+
+**Before calling any build complete, read the current USER_REQUIREMENTS.md v1.03 and integrated build plan v1.02 sections 23–24.**
+
+- **Windows:** Build, actually install, and **launch by desktop/Start-menu click** a self-contained Windows 11 x64 graphical .exe installer. No manual runtime, terminal, API tooling or separate Node/Python installation.
+- **Linux:** Build, actually GUI-install a supported distro's x86_64 package (prefer .deb via graphical software installer) and **launch by application-menu click**; include tested AppImage as portable delivery where possible. No terminal chmod, FUSE setup, apt shell commands or development tools required for the supported one-click install path.
+- **Functional user GUI:** Every clickable menu, button, control, field, filter, model, import/export, data source status, save/reopen and help pathway must be functional or clearly disabled with reason. Every user-facing function needs a discoverable action and comprehensible label/help.
+- **Mandatory QA:** Inventory all GUI controls, then test their actual effects, positive/negative/edge paths, complete user journeys, offline and persistence states on the *installed Windows and Linux apps*. Report individual OS results, traceable evidence and full requirements coverage. A screenshot, code inspection or mock test is not a real installed-app functional pass. Add first-time nontechnical-human acceptance testing.
+- **Blocked release:** If either platform's install/launch is unverified or any applicable GUI action or requirement is failed, missing or untested, call status **INCOMPLETE**, not finished or ready. Do not charge the user for services.
