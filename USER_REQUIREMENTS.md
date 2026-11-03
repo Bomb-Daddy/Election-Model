@@ -1,9 +1,9 @@
 # Election Model — User Requirements
 
-**Version:** 1.02  
+**Version:** 1.03  
 **Added:** 2026-11-02  
-**Updated:** 2026-11-02  
-**Prior versions:** [v1.01](docs/archives/USER_REQUIREMENTS_v1.01.md), [v1.00](docs/archives/USER_REQUIREMENTS_v1.00.md)  
+**Updated:** 2026-11-03  
+**Prior versions:** [v1.02](docs/archives/USER_REQUIREMENTS_v1.02.md), [v1.01](docs/archives/USER_REQUIREMENTS_v1.01.md), [v1.00](docs/archives/USER_REQUIREMENTS_v1.00.md)  
 **Status:** Active / mandatory  
 **Repository:** Election-Model
 
@@ -128,9 +128,10 @@ This adds to, and never weakens, **UR-QA-001**. Every applicable full QA run mus
 |---|---|---|
 | 1.00 | 2026-11-02 | Universal, exhaustive testable user-acceptance requirement coverage for every full QA pass |
 | 1.01 | 2026-11-02 | Added $0 hard cost ceiling; all-category VoteHub integration; six-source polling registry; Poll Explorer; provenance, privacy, offline and QA acceptance criteria |
-| **1.02 (current)** | **2026-11-02** | Consolidated new political-research threads and provisional Voter API request; added RedBox/Marist/Silver and voter-method QA |
+| 1.02 | 2026-11-02 | Consolidated political-research threads and provisional Voter API request; added RedBox/Marist/Silver and voter-method QA |
+| **1.03 (current)** | **2026-11-03** | Non-negotiable Windows/Linux graphical one-click install and execution; complete real-user GUI functional QA and hard release gate |
 
-**Scope:** This is the authoritative current user-requirements file. Superseded versions are archived at [v1.01](docs/archives/USER_REQUIREMENTS_v1.01.md) and [v1.00](docs/archives/USER_REQUIREMENTS_v1.00.md). [Election Analysis Workbench plan](docs/plans/ELECTION_ANALYSIS_WORKBENCH_PLAN_v1.01.md) remains the more detailed implementation specification; it may not override mandatory user requirements. The full project inventory must be reconciled with every additional approved requirement before claiming exhaustive project QA.
+**Scope:** This is the authoritative current user-requirements file. Superseded versions are archived at [v1.02](docs/archives/USER_REQUIREMENTS_v1.02.md), [v1.01](docs/archives/USER_REQUIREMENTS_v1.01.md) and [v1.00](docs/archives/USER_REQUIREMENTS_v1.00.md). [Election Analysis Workbench plan](docs/plans/ELECTION_ANALYSIS_WORKBENCH_PLAN_v1.01.md) remains the more detailed implementation specification; it may not override mandatory user requirements. The full project inventory must be reconciled with every additional approved requirement before claiming exhaustive project QA.
 
 **Status as of revision:** VoteHub connector source and five synthetic/mocked unit tests are committed. **Live API verification, Voter provider free entitlement, Electron UI integration and real installed Windows/Linux functionality are not yet verified complete.**
 
@@ -192,3 +193,54 @@ UR-QA-001 remains mandatory. The complete testability matrix shall include **eve
 Track historical reported RedBox calibration and independent consistency audit v1.03 checks as **source evidence only**, not proof that the new installed application passed. The reported 52/53 source assertions and 66 arithmetic results cannot replace current software testing.
 
 **Acceptance:** Full matrix with PASS/FAIL/NOT TESTED/NOT APPLICABLE for each applicable testable item, counts, build identity, datasets, observed evidence and signed-off unresolved gates. Include real installed Windows/Linux GUI, free-cost and AP entitlement-denial QA. Anything incomplete means **PARTIAL/INCOMPLETE**, not fully released.
+
+---
+
+## UR-INSTALL-001 — Genuine one-click installation on Windows and Linux (MANDATORY)
+
+**User instruction (2026-11-03):** The program must be installable with one graphical action on either Windows or Linux. This is a hard product/release requirement, not documentation or an optional enhancement.
+
+- **Windows 11 x64:** Deliver a self-contained user-installable Windows graphical installer (.exe, e.g. NSIS). User double-clicks installer, follows only necessary OS confirmation/standard install dialog, and obtains normal Start-menu/desktop launch. No terminal, git clone, archive extraction, developer build step, Python, Node, manually installed application framework, paid service or API account.
+- **Linux x86_64:** Deliver at least one **real GUI-installable format** (e.g. .deb opened by the supported distribution's graphical software installer) as well as the planned portable AppImage if technically feasible. User can download, double-click/open with the graphical installer, install, and launch from the application menu. Do not require terminal use, chmod commands, manually installed FUSE, package manager commands, developer environment or separate runtime. AppImage alone does not prove one-click installation unless its graphical double-click launch genuinely works without these extra steps on the supported distro.
+- Install all required program dependencies within the package or automatically through the supported graphical installation process. Do not silently require downloading paid components or a separate runtime.
+- Standard user flow should not require administrator elevation except where the operating system's own native installer legitimately needs it; document any OS prompts and security warnings accurately.
+- Must work on user's intended CPU-only hardware without a dedicated GPU; opening the application must not rely on a network connection or premium service.
+- Verify installable artifacts, not merely build scripts or hypothetical names. Ensure installer file names, versions, checksums and download links correspond to artifacts actually produced.
+
+**Acceptance tests:** On a clean or representative Windows 11 x64 environment and a supported mainstream Linux x86_64 graphical desktop, a tester with no development tools can acquire the delivered installer, install exclusively via the GUI, open the app by clicking its icon, close and relaunch, uninstall via normal OS controls, and confirm documented local data preservation/removal behavior. Capture build ID, OS and package details, launch log/screenshots, every click, expected/actual and failures. Mark **NOT TESTED** without installed-app evidence.
+
+## UR-LAUNCH-001 — One-click execution AFTER installation (MANDATORY)
+
+- Once installed, launch with a **single desktop icon/Start-menu/application-menu click or double-click as appropriate to the OS**. No terminal, script editing, environment variable setup or running a local server manually.
+- The app must initialize usable menus and local data store, support offline startup, show errors intelligibly and allow ordinary graphical exit. The launcher must function after computer reboot and after reopening a previously saved project.
+- Platform-supported clean installation, first run, subsequent run, update/reinstallation and ordinary uninstall are separate test cases; none may be silently assumed.
+
+**Acceptance:** Real package-installed app starts by GUI click, all core data controls render, no console or missing dependency errors occur, and launching again after reboot/relogin or simulated fresh session works. Test both target OSes.
+
+## UR-GUI-001 — Every advertised user-interface function must actually work
+
+- Every visible menu, submenu, tab, toolbar, button, toggle, slider, dropdown, checkbox, text field, filter, help action, file picker, chart interaction, keyboard shortcut, save/load, import/export, model control, source refresh, scenario comparison, QA report and preferences control must have the promised behavior.
+- This includes the project manager, Source Library, VoteHub Poll Explorer (all poll categories as default), other polling provider statuses, Michigan turnout/early voting lab, National/G15 model, prediction ledger, scenario management, settings/help, offline/error screens, and application exit.
+- Buttons that look clickable but do nothing, placeholder dialogs, fake/synthetic data shown as live, routes that lead nowhere, inaccessible controls, broken focus/scrolling, stale control state and crashes on ordinary workflow are release-blocking defects when applicable.
+- Any feature intentionally unavailable because of missing rights/data, incomplete implementation or external API failure must be explicitly disabled and explain why. An unavailable action must never misleadingly appear operational.
+- User must be able to understand and operate the application with **no programming knowledge**, with readable labels, units, explanations/help for all actions and clear feedback on success/failure; do not ask user to manipulate API documentation.
+- Support keyboard-only control, clear focus indicators, no clipped/hidden inputs at typical resolutions, accessible labels and sensible error/loading/empty states.
+
+**Acceptance:** Maintain a **complete, itemized interactive UI inventory** and a linked executable/manual functional test for every control and each intended user workflow. Include expected and actual effect, state change, output or saved record, and evidence on both installed OS packages. A rendered screenshot, source code, unit tests or a successful compile is not a substitute.
+
+## UR-GUI-QA-001 — Real-user GUI acceptance and hostile testing on BOTH platforms
+
+- Conduct a **hands-on end-to-end walkthrough as a first-time nontechnical user** on installed Windows and Linux applications, including installation, launch, tutorial/help, new/open project, import, source inspection, polling filter/search and refresh, modify model assumptions, run calculation, save, export, close/reopen, offline/error recovery, backup/restore and uninstall.
+- Follow every menu branch and each visible control; verify function and resulting state, not just click dispatch. Check mouse and keyboard paths, invalid input, missing/corrupt datasets, canceled dialogs, network failure, duplicate imports, extreme slider values, unexpected source types and long-running processing.
+- Check usability: labels in plain language, actionable error messages, unclipped dialogs, logical tab order, focus visibility, responsiveness on CPU-only hardware and no confusing terminology/extra technical steps. Record actual user-perceived defects separately from code-level defects.
+- Add regression coverage for repaired UI defects. Rerun affected user journeys and other dependent paths after fixes. Do not declare GUI/functionality complete because a mocked callback worked.
+- Record separate Windows and Linux test results. If either package is unavailable, unlaunchable or untested, mark the product **INCOMPLETE**, even when the other platform works.
+- No full QA release until **100% of applicable testable acceptance requirements** (including the control inventory) pass. If any open, unverified, failed or untested applicable item remains, classify **INCOMPLETE**, state the blocker, and do not represent it as a completed release.
+
+**Acceptance evidence required:** Version/commit, SHA-256 installers, supported OS/distro/version, test data and snapshot, requirements-to-control and requirements-to-test traceability, click-to-effect evidence, test counts and outstanding defects by severity. Label activities that can only be human-tested as NOT TESTED until an actual human executes them; simulated user walkthroughs are additional evidence, not a substitute for human acceptance.
+
+## UR-QA-004 — Installer and GUI coverage required by ALL future release QA
+
+UR-QA-001 and UR-QA-003 still apply without modification. Each regular, hostile, integration or release QA that claims a full pass must include all applicable test cases from UR-INSTALL-001, UR-LAUNCH-001, UR-GUI-001 and UR-GUI-QA-001. Record each control and workflow on each target OS independently, including negative and end-to-end paths, and block release if any testable acceptance criterion remains failed or unverified.
+
+**Current state:** This requirements revision establishes the acceptance gate; it does **not** assert working packages or successful GUI/installer testing.
