@@ -50,7 +50,7 @@ try{
   });
   await check('Native CSV file picker imports source and preserves provenance in SQLite',async()=>{
     const csvPath=join(evidence,'synthetic-public-fixture.csv');
-    writeFileSync(csvPath,'pollster,poll_type,share\\nExample Survey,approval,44\\n');
+    writeFileSync(csvPath,'pollster,poll_type,share\nExample Survey,approval,44\n');
     await app.evaluate(({dialog},paths)=>{
       dialog.showOpenDialog=async()=>({canceled:false,filePaths:paths});
     },[csvPath]);
