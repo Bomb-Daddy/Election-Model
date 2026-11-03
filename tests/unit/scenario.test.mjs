@@ -1,0 +1,15 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {calculateScenario, calculateMichigan, normalizedTwoParty, sanitizeCsvCell, recordsToCsv, MICHIGAN_REFERENCE, SCENARIO_DEFAULT} from '../../packages/core/scenario.mjs';
+test('neutral model is zero two-party margin',()=>{const m=calculateScenario(SCENARIO_DEFAULT);assert.equal(m.effectiveMargin,0);assert.equal(m.dVotes,50);assert.equal(m.rVotes,50)});
+test('original Republican cohort 10% absent, 5% D, 85% R',()=>{const m=calculateScenario({...SCENARIO_DEFAULT,rAbstain:10,rCross:5});assert.equal(m.rAbsent,5);assert.equal(m.crossover,2.5);assert.equal(m.rVotes,42.5);assert.deepEqual(m.originalRepublicanExample,{absent:10,crossover:5,third:0,republican:85});assert.ok(Math.abs(m.rConservation)<1e-10)});
+test('crossover is original R denominator',()=>{const m=calculateScenario({...SCENARIO_DEFAULT,rAbstain:10,rCross:5});assert.ok(Math.abs(m.crossover/(m.r0-m.rAbsent)*100-5/90*100)<1e-10)});
+test('third-party and extra-D turnout conserve counts',()=>{const m=calculateScenario({genericMargin:9.9,rAbstain:10,rCross:5,rThird:3,dExtra:10,dThird:3});assert.ok(Math.abs(m.dVotes+m.rVotes+m.third+m.rAbsent-(m.d0*1.10+m.r0))<1e-10)});
+test('input bounds and overlapping original R cohorts rejected',()=>{assert.throws(()=>calculateScenario({...SCENARIO_DEFAULT,rAbstain:80,rCross:30}),/cannot sum/);assert.throws(()=>calculateScenario({...SCENARIO_DEFAULT,rCross:''}),/must be between/);assert.throws(()=>calculateScenario({...SCENARIO_DEFAULT,genericMargin:Infinity}),/must be between/)});
+test('Silver candidate support remains all-response with separate two-party normalization',()=>{const x=normalizedTwoParty(49.9,45.2);assert.ok(Math.abs(x.twoPartyMargin-4.942166)<1e-5);assert.ok(Math.abs(x.otherOrUndecided-4.9)<1e-8);const g=normalizedTwoParty(51.8,42.4);assert.ok(Math.abs(g.twoPartyMargin-9.97876858)<1e-5)});
+test('Michigan frozen observed early ballot count stays constant',()=>{const x=calculateMichigan(MICHIGAN_REFERENCE);assert.equal(x.already,2313165);assert.equal(x.electionDay,2236294);assert.equal(x.removedFuture,0)});
+test('incremental abstention removes only future votes',()=>{const x=calculateMichigan({...MICHIGAN_REFERENCE,mode:'incremental'});assert.ok(x.removedFuture>0);assert.ok(x.adjustedFinal<MICHIGAN_REFERENCE.estimatedFinal);assert.equal(x.already,2313165)});
+test('contest undervote mode does not reduce turnout',()=>{assert.equal(calculateMichigan({...MICHIGAN_REFERENCE,mode:'undervote'}).adjustedFinal,MICHIGAN_REFERENCE.estimatedFinal)});
+test('impossible senior assumptions rejected',()=>{assert.throws(()=>calculateMichigan({...MICHIGAN_REFERENCE,overall65:10}),/Impossible senior/)});
+test('already recorded ballots cannot exceed estimated final',()=>{assert.throws(()=>calculateMichigan({...MICHIGAN_REFERENCE,estimatedFinal:2000000}),/cannot be below/)});
+test('CSV injection guarded',()=>{assert.equal(sanitizeCsvCell('=1+2'),"'=1+2");assert.equal(sanitizeCsvCell(' @evil'),"' @evil");assert.ok(recordsToCsv([{x:'=cmd',y:'quoted,\ntext'}]).includes("'=cmd"))});
