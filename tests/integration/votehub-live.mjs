@@ -27,6 +27,23 @@ const [types,pollsters,subjects]=await Promise.all([
   attempt('subjects',()=>client.getSubjects(true))
 ]);
 const polls=await attempt('polls all categories',()=>client.getPolls({},true));
+if(polls===null){
+  for(const [label,url] of [
+    ['unfiltered','https://api.votehub.com/polls'],
+    ['generic-ballot-filtered','https://api.votehub.com/polls?poll_type=generic-ballot'],
+    ['approval-filtered','https://api.votehub.com/polls?poll_type=approval']
+  ]){
+    try{
+      const r=await fetch(url,{headers:{Accept:'application/json'},signal:AbortSignal.timeout(14000)});
+      const textBody=await r.text();
+      let j;
+      try{j=JSON.parse(textBody)}catch{}
+      const keys=j&&typeof j==='object'?Object.keys(j).slice(0,12):[];
+      const shape=j&&typeof j==='object'?Object.fromEntries(keys.map(key=>[key,Array.isArray(j[key])?'array('+j[key].length+')':typeof j[key]])):{};
+      process.stdout.write('LIVE_API_SHAPE '+JSON.stringify({label,status:r.status,bytes:textBody.length,keys,shape,preview:textBody.slice(0,350)})+'\\n');
+    }catch(e){process.stderr.write('LIVE_API_SHAPE_FAIL '+label+' '+String(e.message||e)+'\\n')}
+  }
+}
 if(polls?.length){
   if(types?.length){
     const observedTypes=[...new Set(polls.map(p=>p.poll_type))];
