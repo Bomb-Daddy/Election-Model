@@ -76,11 +76,19 @@
       "category": "Science",
       "executableName": "election-analysis-workbench",
       "synopsis": "Election polling research and scenario analysis",
-      "description": "Free offline-first election analysis desktop app"
+      "description": "Free offline-first election analysis desktop app",
+      "maintainer": "Election Analysis Workbench <350792676+Bomb-Daddy@users.noreply.github.com>",
+      "syncDesktopName": true
     },
     "toolsets": {
       "appimage": "1.0.3"
     },
     "publish": null
-  }
+  },
+  "homepage": "https://github.com/Bomb-Daddy/Election-Model",
+  "author": {
+    "name": "Bomb-Daddy",
+    "url": "https://github.com/Bomb-Daddy"
+  },
+  "desktopName": "election-analysis-workbench"
 }
