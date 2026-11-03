@@ -1,12 +1,12 @@
 # Election Analysis Workbench
 
-**Status (2026-11-03):** A Windows/Linux **development preview v0.1.0 is built and tested** with one-click installer binaries. 28 unit tests, 13 packaged GUI smoke checks and 13 actually installed GUI smoke checks pass on each tested OS. **Free live VoteHub API verified** across all 5 endpoints: 6,108 polls, 10 categories. **Full project requirements QA and human usability acceptance remain INCOMPLETE; this is NOT a final certified release.**
+**Status (2026-11-03):** A Windows/Linux **development preview v0.1.0 is built and CI-tested** with one-click installer binaries. 28 unit tests, 13 packaged GUI smoke checks and 13 installed GUI smoke checks pass on Windows Server 2025 and Ubuntu 24.04 hosted CI runners. **Windows 11 human installation is still untested.** **Free live VoteHub API verified** across all 5 endpoints: 6,108 polls, 10 categories. **Full project requirements QA and human usability acceptance remain INCOMPLETE; this is NOT a final certified release.**
 
 An initial local-first, GUI-based Windows/Linux election data workbench combining Michigan 2026 turnout analysis with a national OSINT participation and geographic scenario engine. The preview supports local CSV/XLSX/JSON imports, immutable SQLite snapshots, VoteHub polling exploration, Michigan/national conditional scenario arithmetic, prediction register, saved scenario comparisons, backup/restore and core QA. Full authorized historical models, complete provider automation, Google Sheets OAuth and comprehensive source imports are not yet completed.
 
 ## Status, downloads and QA
 
-Latest developer-test binaries are published under [corrected v0.1.0 developer prerelease](https://github.com/Bomb-Daddy/Election-Model/releases/tag/v0.1.0-preview-96846df) with direct Windows .exe and Linux .deb/AppImage assets. Use the newest tested prerelease, not the older VoteHub-broken v0.1.0-preview-73bd602. The [installed-platform QA evidence v1.01](docs/qa/BUILD_QA_CHECKPOINT_2026-11-03_v1.01.md) records tested and untested requirements.
+Latest developer-test binaries are published under [corrected v0.1.0 developer prerelease](https://github.com/Bomb-Daddy/Election-Model/releases/tag/v0.1.0-preview-96846df) with direct Windows .exe and Linux .deb/AppImage assets. Use the newest tested prerelease, not the older VoteHub-broken v0.1.0-preview-73bd602. The [installed-platform QA evidence v1.02](docs/qa/BUILD_QA_CHECKPOINT_2026-11-03_v1.02.md) records tested and untested requirements.
 
 ## For Claude Sonnet / Claude Code
 
