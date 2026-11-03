@@ -14,6 +14,7 @@ if(!executable)throw new Error('Set ELECTION_EXECUTABLE to the actual packaged E
 const evidence=resolve('qa-artifacts');
 mkdirSync(evidence,{recursive:true});
 const args=process.platform==='linux'?['--no-sandbox']:[];
+const uniqueRun='QA '+process.platform+' '+process.pid+' '+Date.now();
 let app=null,window=null;
 async function check(name,task){
   try{await task();console.log('PASS '+name)}catch(error){console.error('FAIL '+name+': '+error.message);throw error}
@@ -44,9 +45,9 @@ try{
     await window.getByText('85.0%').waitFor();
   });
   await check('Scenario persists to SQLite and is visibly listed',async()=>{
-    await window.getByRole('textbox',{name:'Scenario name'}).fill('Automated installed-GUI test');
+    await window.getByRole('textbox',{name:'Scenario name'}).fill(uniqueRun);
     await window.getByRole('button',{name:'Save as new version'}).click();
-    await window.getByRole('button',{name:/Automated installed-GUI test/}).waitFor();
+    await window.getByRole('button',{name:uniqueRun}).waitFor();
   });
   await check('Native CSV file picker imports source and preserves provenance in SQLite',async()=>{
     const csvPath=join(evidence,'synthetic-public-fixture.csv');
@@ -88,11 +89,11 @@ try{
   });
   await check('Prediction register creates dated immutable evidence',async()=>{
     await window.getByRole('button',{name:'Predictions'}).click();
-    await window.getByRole('textbox',{name:'Title'}).fill('CI sample only');
+    await window.getByRole('textbox',{name:'Title'}).fill(uniqueRun+' prediction');
     await window.getByRole('textbox',{name:'Exact prediction and conditions'}).fill('This is an explicit automated test entry and not a factual prediction.');
     await window.getByLabel('Event / target date').fill('2028-11-07');
     await window.getByRole('button',{name:'Record prediction'}).click();
-    await window.getByText('CI sample only').waitFor();
+    await window.getByText(uniqueRun+' prediction').waitFor();
   });
   await check('Core QA button runs real calculations and reports incomplete release gate',async()=>{
     await window.getByRole('button',{name:'QA Center'}).click();
