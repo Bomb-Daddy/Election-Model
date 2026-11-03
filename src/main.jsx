@@ -22,7 +22,7 @@ const nav=[
 ];
 function Info({children}){return <p className="fine">{children}</p>}
 function Alert({children,kind='note'}){return <div className={'alert '+kind} role="status">{children}</div>}
-function Busy({busy,children,...props}){return <button type="button" disabled={busy||props.disabled} {...props}>{children}</button>}
+function Busy({busy,children,...props}){return <button type="button" {...props} disabled={busy||props.disabled}>{children}</button>}
 function ErrorMessage({message,onDismiss}){return message?<div className="alert error" role="alert"><span>{message}</span><button aria-label="Dismiss message" onClick={onDismiss}>Dismiss</button></div>:null}
 function TextField({label,value,onChange,help,type='text',min,max,step,placeholder,required=false}){
  return <label className="input-wrap"><span className="input-label">{label}</span><input type={type} value={value??''} onChange={e=>onChange(e.target.value)} min={min} max={max} step={step} placeholder={placeholder} required={required}/>{help?<small>{help}</small>:null}</label>;
@@ -176,7 +176,7 @@ function Help(){
 function App(){
  const [active,setActive]=useState('projects'),[projects,setProjects]=useState([]),[projectId,setProjectId]=useState(''),[status,setStatus]=useState(null),[busy,setBusy]=useState(false),[error,setError]=useState(''),[message,setMessage]=useState('');
  const perform=async(command,args={},successMessage='')=>{setError('');setBusy(true);try{const x=await api(command,args);if(successMessage&&!x?.canceled)setMessage(successMessage);return x}catch(e){setError(e?.message||String(e));return null}finally{setBusy(false)}};
- const refreshProjects=async(selected)=>{const list=await perform('projects:list');if(list){setProjects(list);setProjectId(selected||old=>(list.some(p=>p.id===old)?old:(list[0]?.id||'')))}};
+ const refreshProjects=async(selected)=>{const list=await perform('projects:list');if(list){setProjects(list);if(selected){setProjectId(selected)}else{setProjectId(old=>(list.some(p=>p.id===old)?old:(list[0]?.id||'')))}}};
  useEffect(()=>{let mounted=true;const init=async()=>{try{const [p,s]=await Promise.all([api('projects:list'),api('system:status')]);if(mounted){setProjects(p);setProjectId(p[0]?.id||'');setStatus(s)}}catch(e){if(mounted)setError('Could not initialize application: '+e.message)}};init();const off=window.workbench.onNavigate(p=>{setActive(p);setMessage('')});return()=>{mounted=false;off()}},[]);
  const project=projects.find(p=>p.id===projectId);
  let view;
