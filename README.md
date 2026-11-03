@@ -29,6 +29,9 @@ The free, CC BY 4.0 VoteHub polling connector is now implemented at [packages/co
 
 ## Mandatory graphical installation and user acceptance
 
+- **[One-click installation + full GUI QA release blocker](https://github.com/Bomb-Daddy/Election-Model/issues/4)** — do not close without both installed-platform launches and complete real-user testing.
+
+
 **Not optional.** The application must arrive as a self-contained, genuinely **one-click graphical install and one-click launch** on both **Windows 11 x64** (installer .exe plus Start-menu launch) and **Linux x86_64** (graphically installable .deb on supported distro and application-menu launch; portable AppImage only where GUI launching actually works). Users must **not** install Python, Node, FUSE, API tools or run terminal commands to install/launch the supported package. No billable services.
 
 **Every user-visible GUI action must function and be tested as an end user.** Claude must build a full control inventory, exercise every visible menu/control and complete user flows on **both actual installed platforms**, verify effects/persistence/error states and perform a first-time nontechnical-user walkthrough. No release-ready claim until every applicable requirement passes with OS-specific observed evidence. Current installation and GUI QA status: **NOT TESTED**.
