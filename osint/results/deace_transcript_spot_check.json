@@ -1,5 +1,5 @@
 {
-  "checked_utc": "2026-11-09T17:29:08.540600+00:00",
+  "checked_utc": "2026-11-09T17:30:23.899682+00:00",
   "rss_url": "https://feeds.megaphone.fm/BMDC3578899879",
   "status": "failed",
   "method": "independent faster-whisper base.en ASR on publisher audio at 5 sample windows",
@@ -8,6 +8,7 @@
     "guid": "ce95a408-da03-11f1-a3b4-b3021ae04d6e",
     "published": "Fri, 06 Nov 2026 19:00:00 -0000"
   },
-  "audio_bytes": 139842852,
-  "error": "[Errno 2] No such file or directory: 'ffprobe'"
+  "audio_bytes": 138449796,
+  "duration_seconds": 5766.97,
+  "error": "open() got an unexpected keyword argument 'metadata_errors'"
 }
