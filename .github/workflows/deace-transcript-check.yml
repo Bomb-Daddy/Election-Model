@@ -1,0 +1,35 @@
+name: Steve Deace transcript source spot-check
+
+on:
+  push:
+    branches:
+      - osint-deace-pilot-2026-11-09
+    paths:
+      - .github/workflows/deace-transcript-check.yml
+
+permissions:
+  contents: write
+
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout test branch
+        uses: actions/checkout@v4
+      - name: Install independent ASR
+        run: python3 -m pip install --disable-pip-version-check faster-whisper
+      - name: Compare five segments against source recording
+        run: python3 osint/deace_transcript_spot_check.py
+      - name: Preserve QA evidence only
+        if: always()
+        run: |
+          if test -f osint/results/deace_transcript_spot_check.json; then
+            git config user.name 'OSINT Audio QA'
+            git config user.email 'osint-qa@users.noreply.github.com'
+            git add osint/results/deace_transcript_spot_check.json
+            if ! git diff --cached --quiet; then
+              git commit -m 'Record independent sampled audio transcription QA'
+              git push origin HEAD:osint-deace-pilot-2026-11-09
+            fi
+          fi
