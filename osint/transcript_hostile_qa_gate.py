@@ -84,6 +84,8 @@ def audit(folder):
         "audio_sha256":audio_hash,
         "publisher_episode_guid":verification.get("guid"),
         "reviewer":"","reviewed_utc":"",
+        "exact_source_recording_archived_privately":False,
+        "source_recording_archive_reference":"",
         "sampled_windows":windows,
         "high_impact_claims_all_audio_checked":False,
         "speaker_attributions_verified_or_left_unknown":False,
@@ -104,6 +106,8 @@ def audit(folder):
         review.get("status")=="APPROVED_AFTER_AUDIO_REVIEW"
         and bool(review.get("reviewer")) and bool(review.get("reviewed_utc"))
         and review.get("audio_sha256")==audio_hash
+        and review.get("exact_source_recording_archived_privately") is True
+        and bool(review.get("source_recording_archive_reference"))
         and review.get("publisher_episode_guid")==verification.get("guid")
         and required_windows.issubset(reviewed.keys())
         and all(bool(reviewed[k].get("audio_compared")) and
