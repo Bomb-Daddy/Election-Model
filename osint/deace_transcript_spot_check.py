@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Independent ASR QA against original Deace feed audio; no audio or full transcript committed."""
-import datetime as dt, email.utils, hashlib, json, subprocess, tempfile, urllib.request
+import datetime as dt, email.utils, hashlib, json, subprocess, tempfile, urllib.request, traceback
 import xml.etree.ElementTree as ET
 from pathlib import Path
 from faster_whisper import WhisperModel
@@ -51,6 +51,7 @@ try:
     record["status"]="sampled_audio_asr_completed"
 except Exception as exc:
   record["error"]=str(exc)
+  record["traceback"]=traceback.format_exc()[-4000:]
 finally:
   save()
 print(json.dumps(record,ensure_ascii=False,indent=2))
