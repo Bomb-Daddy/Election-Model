@@ -17,6 +17,8 @@ jobs:
     steps:
       - name: Checkout test branch
         uses: actions/checkout@v4
+      - name: Install audio inspection tools
+        run: sudo apt-get update -qq && sudo apt-get install -y ffmpeg
       - name: Install independent ASR
         run: python3 -m pip install --disable-pip-version-check faster-whisper
       - name: Compare five segments against source recording
