@@ -11,7 +11,15 @@ permissions:
   contents: read
 
 jobs:
+  validate_qa_gate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout isolated test branch
+        uses: actions/checkout@v4
+      - name: Run hostile gate regression tests
+        run: python3 osint/test_transcript_hostile_qa_gate.py
   transcribe:
+    needs: validate_qa_gate
     runs-on: ubuntu-latest
     timeout-minutes: 90
     steps:
@@ -27,6 +35,8 @@ jobs:
         run: python3 -m pip install --disable-pip-version-check faster-whisper huggingface-hub==0.35.3
       - name: Transcribe entire November 6 audio
         run: python3 osint/deace_full_transcribe.py
+      - name: Mandatory hostile structural QA and independent review gate
+        run: python3 osint/transcript_hostile_qa_gate.py transcript_out
       - name: Upload full transcript (short-lived, no audio)
         if: always()
         uses: actions/upload-artifact@v4
@@ -37,6 +47,8 @@ jobs:
             transcript_out/transcript.srt
             transcript_out/transcript_segments.json
             transcript_out/verification.json
+            transcript_out/hostile_qa_report.json
+            transcript_out/independent_audio_review_template.json
           retention-days: 1
           if-no-files-found: error
       - name: Show verified output statistics
