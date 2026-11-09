@@ -17,6 +17,8 @@ jobs:
     steps:
       - name: Checkout isolated test branch
         uses: actions/checkout@v4
+      - name: Install duration validator
+        run: python3 -m pip install --user --disable-pip-version-check mutagen
       - name: Fetch RSS, download and verify original audio
         continue-on-error: true
         run: python3 osint/deace_podcast_rss_pilot.py
