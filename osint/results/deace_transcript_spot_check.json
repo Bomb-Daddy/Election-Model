@@ -1,7 +1,7 @@
 {
-  "checked_utc": "2026-11-09T17:32:29.549199+00:00",
+  "checked_utc": "2026-11-09T17:33:55.855027+00:00",
   "rss_url": "https://feeds.megaphone.fm/BMDC3578899879",
-  "status": "failed",
+  "status": "sampled_audio_asr_completed",
   "method": "independent faster-whisper base.en ASR on publisher audio at 5 sample windows",
   "episode": {
     "title": "FINAL WORD: What Do We Make of the Midterm BEATDOWN? | 11/6/26",
@@ -10,5 +10,81 @@
   },
   "audio_bytes": 138449796,
   "duration_seconds": 5766.97,
-  "error": "open() got an unexpected keyword argument 'metadata_errors'"
+  "samples": [
+    {
+      "label": "intro_ad",
+      "start_s": 0,
+      "length_s": 25,
+      "word_count": 14,
+      "excerpt_first_16_words": "and greetings happy Friday. Welcome to the Steve Day show here on Blaze TV.",
+      "preview_topic_anchor_matches": {
+        "simplisafe": false,
+        "steve_deace": false,
+        "happy_friday": true,
+        "dallas": false,
+        "ottumwa": false,
+        "aaron": false
+      }
+    },
+    {
+      "label": "host_intro",
+      "start_s": 30,
+      "length_s": 29,
+      "word_count": 87,
+      "excerpt_first_16_words": "Dallas right after the show, we are headed back home to a terminal Iowa, where our",
+      "preview_topic_anchor_matches": {
+        "simplisafe": false,
+        "steve_deace": false,
+        "happy_friday": false,
+        "dallas": true,
+        "ottumwa": false,
+        "aaron": true
+      }
+    },
+    {
+      "label": "early_program",
+      "start_s": 70,
+      "length_s": 28,
+      "word_count": 90,
+      "excerpt_first_16_words": "Well, they've also received over 5,000 commitments to Christ as well from women who not just",
+      "preview_topic_anchor_matches": {
+        "simplisafe": false,
+        "steve_deace": false,
+        "happy_friday": false,
+        "dallas": false,
+        "ottumwa": false,
+        "aaron": false
+      }
+    },
+    {
+      "label": "mid_program",
+      "start_s": 2700,
+      "length_s": 24,
+      "word_count": 99,
+      "excerpt_first_16_words": "just flew. We already knew. Right, Todd? We already knew. We already knew how to isolate",
+      "preview_topic_anchor_matches": {
+        "simplisafe": false,
+        "steve_deace": false,
+        "happy_friday": false,
+        "dallas": false,
+        "ottumwa": false,
+        "aaron": false
+      }
+    },
+    {
+      "label": "late_program",
+      "start_s": 5400,
+      "length_s": 24,
+      "word_count": 65,
+      "excerpt_first_16_words": "should honor that. And I think if you deal with that first, then I would turn",
+      "preview_topic_anchor_matches": {
+        "simplisafe": false,
+        "steve_deace": false,
+        "happy_friday": false,
+        "dallas": false,
+        "ottumwa": false,
+        "aaron": false
+      }
+    }
+  ]
 }
