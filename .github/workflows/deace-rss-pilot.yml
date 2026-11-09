@@ -1,0 +1,42 @@
+name: Steve Deace RSS audio pilot
+
+on:
+  push:
+    branches:
+      - osint-deace-pilot-2026-11-09
+    paths:
+      - .github/workflows/deace-rss-pilot.yml
+
+permissions:
+  contents: write
+
+jobs:
+  recover:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout isolated test branch
+        uses: actions/checkout@v4
+      - name: Fetch RSS, download and verify original audio
+        continue-on-error: true
+        run: python3 osint/deace_podcast_rss_pilot.py
+      - name: Preserve metadata and hash, NOT audio
+        if: always()
+        run: |
+          test -f osint/results/deace_latest.json
+          git config user.name 'OSINT RSS Pilot'
+          git config user.email 'osint-pilot@users.noreply.github.com'
+          git add osint/results/deace_latest.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'Record Steve Deace RSS live retrieval and checksum QA'
+            git push origin HEAD:osint-deace-pilot-2026-11-09
+          fi
+      - name: Enforce audio acceptance
+        run: |
+          python3 - <<'PY'
+          import json
+          data = json.load(open("osint/results/deace_latest.json"))
+          assert data["state"] == "audio_download_pass", data.get("error")
+          assert data["steps"]["audio_download"]["bytes"] > 1000000
+          print("ACCEPTANCE PASS: downloaded full publisher audio, metadata and SHA256 saved")
+          PY
