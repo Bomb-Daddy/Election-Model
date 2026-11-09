@@ -1,0 +1,13 @@
+{
+  "checked_utc": "2026-11-09T17:29:08.540600+00:00",
+  "rss_url": "https://feeds.megaphone.fm/BMDC3578899879",
+  "status": "failed",
+  "method": "independent faster-whisper base.en ASR on publisher audio at 5 sample windows",
+  "episode": {
+    "title": "FINAL WORD: What Do We Make of the Midterm BEATDOWN? | 11/6/26",
+    "guid": "ce95a408-da03-11f1-a3b4-b3021ae04d6e",
+    "published": "Fri, 06 Nov 2026 19:00:00 -0000"
+  },
+  "audio_bytes": 139842852,
+  "error": "[Errno 2] No such file or directory: 'ffprobe'"
+}
