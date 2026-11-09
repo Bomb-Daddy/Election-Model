@@ -61,7 +61,7 @@ try:
                 h.update(b); f.write(b)
         if size < 1000000: raise ValueError("Audio unexpectedly short: %d bytes" % size)
         with file.open("rb") as f: magic = f.read(4)
-        if not (magic.startswith(b"ID3") or magic[:2] in (b"\\xff\\xfb", b"\\xff\\xf3", b"\\xff\\xf2")):
+        if not (magic.startswith(b"ID3") or (len(magic) >= 2 and magic[0] == 255 and (magic[1] & 0xe0) == 0xe0)):
             raise ValueError("Audio does not have recognizable MP3 header")
         if shutil.which("ffprobe"):
             p = subprocess.run(["ffprobe", "-v", "error", "-show_entries",
