@@ -72,6 +72,11 @@ try:
             duration = float(info.get("duration", "0"))
             result["audio_duration_seconds"] = duration
             if duration < 5400: raise ValueError("Audio duration too short")
+        from mutagen.mp3 import MP3
+        duration = float(MP3(str(file)).info.length)
+        result["audio_duration_seconds"] = round(duration, 2)
+        if not (5400 <= duration <= 7200):
+            raise ValueError("Unexpected episode duration %.2fs" % duration)
         result["steps"]["audio_download"] = {"status": "pass", "bytes": size, "sha256": h.hexdigest(), "format": "MP3"}
         result["state"] = "audio_download_pass"
 except Exception as e:
