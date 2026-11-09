@@ -1,5 +1,5 @@
 {
-  "checked_utc": "2026-11-09T17:30:23.899682+00:00",
+  "checked_utc": "2026-11-09T17:32:29.549199+00:00",
   "rss_url": "https://feeds.megaphone.fm/BMDC3578899879",
   "status": "failed",
   "method": "independent faster-whisper base.en ASR on publisher audio at 5 sample windows",
