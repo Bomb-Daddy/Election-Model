@@ -1,0 +1,51 @@
+name: Steve Deace complete Whisper transcript
+
+on:
+  push:
+    branches:
+      - osint-deace-pilot-2026-11-09
+    paths:
+      - .github/workflows/deace-full-transcript.yml
+
+permissions:
+  contents: read
+
+jobs:
+  transcribe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - name: Checkout isolated test branch
+        uses: actions/checkout@v4
+      - name: Setup Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install audio tools
+        run: sudo apt-get update -qq && sudo apt-get install -y ffmpeg
+      - name: Install faster-whisper
+        run: python3 -m pip install --disable-pip-version-check faster-whisper huggingface-hub==0.35.3
+      - name: Transcribe entire November 6 audio
+        run: python3 osint/deace_full_transcribe.py
+      - name: Upload full transcript (short-lived, no audio)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: deace-2026-11-06-whisper-complete
+          path: |
+            transcript_out/transcript.txt
+            transcript_out/transcript.srt
+            transcript_out/transcript_segments.json
+            transcript_out/verification.json
+          retention-days: 1
+          if-no-files-found: error
+      - name: Show verified output statistics
+        if: success()
+        run: |
+          python3 - <<'PY'
+          import json
+          d=json.load(open("transcript_out/verification.json"))
+          assert d["status"]=="complete_unreviewed"
+          assert d["word_count"]>5000
+          print("Complete transcription:",d["word_count"],"words",d["segments"],"segments")
+          PY
