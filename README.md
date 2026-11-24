@@ -58,3 +58,8 @@ References: [Authoritative USER_REQUIREMENTS.md v1.03](USER_REQUIREMENTS.md) (UR
 ## Source status
 
 The versioned plan is grounded in the existing Michigan turnout v2.03, OSINT national v3 and Michigan–OSINT integration QA v1.00. It explicitly tracks known defects and uncertainty. The first working local-first desktop modules and free live VoteHub connector have been implemented. Comprehensive source-data integration and full release QA remain incomplete.
+
+
+## Public Political Prediction Register
+
+See the [Public Political Prediction Register](docs/prediction-register/README.md) for separately dated forecasts, historical records, and developing Nvidiagate hypotheses. The register does not alter the Election Analysis Workbench application.
